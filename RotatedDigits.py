@@ -1,6 +1,33 @@
 # https://leetcode.com/problems/rotated-digits
 
+# Optimised Version
 class Solution:
+    def rotatedDigits(self, n: int) -> int:
+        memo = {0: 0, 1: 1, 2: 5, 3: None, 4: None,
+                5: 2, 6: 9, 7: None, 8: 8, 9: 6}
+        good_numbers = 0
+        for i in range(n+1):
+            converted_num = self.convertNumber(i, memo)
+            if converted_num is not None and i != self.convertNumber(i, memo):
+                good_numbers = good_numbers + 1
+        return good_numbers
+
+    def convertNumber(self, n, memo):
+        if n in memo:
+            return memo[n]
+        dig = n % 10
+        if memo[dig] is None:
+            memo[n] = None
+            return memo[n]
+        converted_num = self.convertNumber(n//10, memo)
+        if converted_num is None:
+            memo[n] = None
+            return memo[n]
+        memo[n] = converted_num * 10 + memo[dig]
+        return memo[n]
+
+
+class SolutionV1:
     def rotatedDigits(self, n: int) -> int:
         mapping = {0: 0, 1: 1, 2: 5, 3: None, 4: None,
                    5: 2, 6: 9, 7: None, 8: 8, 9: 6}
@@ -31,10 +58,3 @@ class Solution:
 
 
 print(Solution().rotatedDigits(10000))
-
-# mapping = {0: 0, 1: 1, 2: 5, 3: None, 4: None,
-#             5: 2, 6: 9, 7: None, 8: 8, 9: 6}
-# memo = {}
-# for i in range(0, 11):
-#     if Solution().isGoodNumber(i, mapping, memo):
-#         print(i)
