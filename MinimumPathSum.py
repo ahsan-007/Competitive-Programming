@@ -5,7 +5,7 @@ from typing import List
 
 class Solution:
     def minPathSum(self, grid: List[List[int]]) -> int:
-        return self.minPathSumR(grid, 0, 0)
+        return self.minPathSumR(grid, 0, 0, {})
 
     def minPathSumR(self, grid, i, j, computed_sums={}):
         if i == len(grid) - 1 and j == len(grid[i])-1:
@@ -43,4 +43,4 @@ class Solution:
 
 
 # print(Solution().minPathSum([[1, 3, 1], [1, 5, 1], [4, 2, 1]]))
-print(Solution().minPathSum([[1,2,3],[4,5,6]]))
+print(Solution().minPathSum([[1, 2, 3], [4, 5, 6]]))
