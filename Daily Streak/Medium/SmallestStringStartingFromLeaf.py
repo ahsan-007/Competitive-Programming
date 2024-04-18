@@ -16,22 +16,33 @@ class Solution:
     def smallestFromLeaf(self, root: Optional[TreeNode]) -> str:
         def smallestFromLeafUtil(node):
             if not node:
-                return 0, ""
+                return []
 
-            left_val, left_str = smallestFromLeafUtil(node.left)
-            right_val, right_str = smallestFromLeafUtil(node.right)
+            words = smallestFromLeafUtil(node.left)
+            words.extend(smallestFromLeafUtil(node.right))
+            if not words:
+                return [chr(node.val + ord('a'))]
+            return [word + chr(node.val + ord('a')) for word in words]
 
-            if node.left and (not node.right or left_val < right_val):
-                left_val = left_val * 10 + node.val
-                left_str = left_str + chr(node.val + ord('a'))
-                return left_val, left_str
-            else:
-                right_val = right_val * 10 + node.val
-                right_str = right_str + chr(node.val + ord('a'))
-                return right_val, right_str
+        return min(smallestFromLeafUtil(root))
 
-        _, smallest = smallestFromLeafUtil(root)
-        return smallest
+    def smallestFromLeafV2(self, root: Optional[TreeNode]) -> str:
+        self.smallest = None
+
+        def smallestFromLeafUtil(node, current_str):
+            if not node:
+                return
+
+            current_str = chr(node.val + ord('a')) + current_str
+            if not node.left and not node.right:
+                if not self.smallest or current_str < self.smallest:
+                    self.smallest = current_str
+
+            smallestFromLeafUtil(node.left, current_str)
+            smallestFromLeafUtil(node.right, current_str)
+
+        smallestFromLeafUtil(root, "")
+        return self.smallest
 
 
 print(Solution().smallestFromLeaf(root=TreeNode(0,
@@ -49,3 +60,31 @@ print(Solution().smallestFromLeaf(root=TreeNode(25,
                                                 TreeNode(3,
                                                          TreeNode(0),
                                                          TreeNode(2)))))
+
+print(Solution().smallestFromLeaf(root=TreeNode(3,
+                                                TreeNode(9),
+                                                TreeNode(20,
+                                                         TreeNode(15),
+                                                         TreeNode(7)))))
+
+print(Solution().smallestFromLeafV2(root=TreeNode(0,
+                                                  TreeNode(1,
+                                                           TreeNode(3),
+                                                           TreeNode(4)),
+                                                  TreeNode(2,
+                                                           TreeNode(3),
+                                                           TreeNode(4)))))
+
+print(Solution().smallestFromLeafV2(root=TreeNode(25,
+                                                  TreeNode(1,
+                                                           TreeNode(1),
+                                                           TreeNode(3)),
+                                                  TreeNode(3,
+                                                           TreeNode(0),
+                                                           TreeNode(2)))))
+
+print(Solution().smallestFromLeafV2(root=TreeNode(3,
+                                                  TreeNode(9),
+                                                  TreeNode(20,
+                                                           TreeNode(15),
+                                                           TreeNode(7)))))
