@@ -59,9 +59,32 @@ class Solution:
             node = node.next
         print()
 
+    # recursion
+    def pairSumV2(self, head: Optional[ListNode]) -> int:
+        def pairSumUtil(slow, fast):
+            if not slow or not fast or not fast.next:
+                return 0, None
+
+            maxPairSum, node = pairSumUtil(slow.next, fast.next.next)
+            if node:
+                return max(maxPairSum, slow.val + node.val), node.next
+            else:
+                return slow.val + slow.next.val, slow.next.next
+
+        maxPairSum, _ = pairSumUtil(head, head)
+        return maxPairSum
+
 
 head = ListNode(5, ListNode(4, ListNode(2, ListNode(1))))
 print(Solution().pairSum(head))
 
 head = ListNode(1, ListNode(1000))
 print(Solution().pairSum(head))
+
+print('-' * 100)
+
+head = ListNode(5, ListNode(4, ListNode(2, ListNode(1))))
+print(Solution().pairSumV2(head))
+
+head = ListNode(1, ListNode(1000))
+print(Solution().pairSumV2(head))
