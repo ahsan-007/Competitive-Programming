@@ -7,7 +7,9 @@ class Solution:
     def countSubmatrices(self, grid: List[List[int]], k: int) -> int:
         count = 0
         for i in range(len(grid)):
-            for j in range(len(grid[i])):
+            isSumValid = True
+            j = 0
+            while j < len(grid[i]) and isSumValid:
                 if i != 0 or j != 0:
                     if i == 0 or j == 0:
                         if i == 0:
@@ -20,6 +22,9 @@ class Solution:
 
                 if grid[i][j] <= k:
                     count += 1
+                else:
+                    isSumValid = False
+                j = j + 1
         return count
 
 
